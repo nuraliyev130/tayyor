@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HayCare - Semirtirish</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #b7f7c5;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      color: #00ff66;
+      text-align: center;
+    }
+    label, select, input {
+      display: block;
+      margin: 10px 0 5px;
+      width: 100%;
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+    }
+    select, input[type=number] {
+      background: #222;
+      color: #b7f7c5;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+      background: #00bb44;
+      border: none;
+      color: white;
+      font-size: 18px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #natija {
+      margin-top: 30px;
+      background: #222;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 18px;
+      white-space: pre-line;
+    }
+    .warning { color: #ff5555; }
+    .good { color: #55ff55; }
+    .semirtirish-turi {
+      font-weight: bold;
+      font-size: 22px;
+      margin-top: 15px;
+    }
+    a.bosh-sahifa {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 15px;
+      background: #00bb44;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    a.bosh-sahifa:hover {
+      background: #009933;
+    }
+    #tarix {
+      margin-top: 30px;
+      background: #222;
+      padding: 15px;
+      border-radius: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+      font-size: 16px;
+    }
+    #clearTarix {
+      margin-top: 10px;
+      background: #ff4444;
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐮 Semirtirish bo‘limi</h1>
+
+  <form id="semirtirishForm">
+    <label for="tur">Hayvon turi:</label>
+    <select id="tur" required>
+      <option value="" disabled selected>Tanlang</option>
+      <option value="sigir">Sigir</option>
+      <option value="qoy">Qo‘y</option>
+      <option value="echki">Echki</option>
+      <option value="ot">Ot</option>
+    </select>
+
+    <label for="yosh">Yoshi (oyda):</label>
+    <input type="number" id="yosh" min="1" required />
+
+    <label for="vazn">Bugungi vazni (kg):</label>
+    <input type="number" id="vazn" min="1" required />
+
+    <label for="vaznOld">Oxirgi oylik vazn (kg):</label>
+    <input type="number" id="vaznOld" min="1" required />
+
+    <button type="submit">Hisoblash</button>
+  </form>
+
+  <div id="natija"></div>
+
+  <h2>Semirtirish tarixingiz:</h2>
+  <div id="tarix">Hozircha tarix bo‘sh...</div>
+  <button id="clearTarix">Tarixni tozalash</button>
+
+  <a href="index.html" class="bosh-sahifa">⬅️ Bosh sahifaga qaytish</a>
+
+  <script>
+    const vitaminTavsiyalar = {
+      sigir: ['Vitamin A', 'Vitamin D', 'Vitamin E', 'Kalsiy', 'Fosfor'],
+      qoy: ['Vitamin A', 'Vitamin D', 'Vitamin E', 'Rux', 'Kobalt'],
+      echki: ['Vitamin A', 'Vitamin D', 'Vitamin E', 'Kalsiy', 'Sink'],
+      ot: ['Vitamin A', 'Vitamin D', 'Vitamin E', 'Selen', 'Kalsiy']
+    };
+
+    const ovqatMahal = {
+      sigir: 3,
+      qoy: 3,
+      echki: 3,
+      ot: 3
+    };
+
+    const yemAralashmalari = {
+      sigir: [
+        {name: 'Sana', amount: 1.2, time: 'Ertalab'},
+        {name: 'Jo‘xori', amount: 1.0, time: 'Abetga'},
+        {name: 'Arpa', amount: 1.0, time: 'Kechqurun'},
+        {name: 'Bug‘doy', amount: 0.8, time: 'Kechqurun'},
+        {name: 'Yorma', amount: 0.5, time: 'Kunjara'}
+      ],
+      qoy: [
+        {name: 'Sana', amount: 1.0, time: 'Ertalab'},
+        {name: 'Bug‘doy', amount: 0.8, time: 'Abetga'},
+        {name: 'Jo‘xori', amount: 1.0, time: 'Kechqurun'},
+        {name: 'Yorma', amount: 0.6, time: 'Kunjara'},
+        {name: 'Yashil o‘tlar', amount: 2.0, time: 'Kunjara'}
+      ],
+      echki: [
+        {name: 'Yashil o‘tlar', amount: 2.0, time: 'Ertalab'},
+        {name: 'Sana', amount: 1.0, time: 'Abetga'},
+        {name: 'Jo‘xori', amount: 1.0, time: 'Kechqurun'},
+        {name: 'Bug‘doy', amount: 0.8, time: 'Kechqurun'}
+      ],
+      ot: [
+        {name: 'Jo‘xori', amount: 1.5, time: 'Ertalab'},
+        {name: 'Bug‘doy', amount: 1.0, time: 'Abetga'},
+        {name: 'Sana', amount: 1.2, time: 'Kechqurun'},
+        {name: 'Yashil o‘tlar', amount: 3.0, time: 'Kunjara'}
+      ]
+    };
+
+    function semirtirishTuriniAniqlash(foiz) {
+      if (foiz > 5) return "Tez semirtirish";
+      else if (foiz > 2) return "Oddiy semirtirish";
+      else if (foiz > 0) return "Sekin semirtirish";
+      else return "Vazn kamaymoqda yoki barqaror";
+    }
+
+    function tashxisQoyish(foiz) {
+      if (foiz > 5) return "Hayvon yaxshi semirmoqda, rejani davom ettiring.";
+      else if (foiz > 2) return "Hayvon semirmoqda, lekin yaxshilash kerak.";
+      else if (foiz > 0) return "Semirtirish sekin kechmoqda, diqqat qiling.";
+      else return "Vazn kamaymoqda yoki barqaror, veterinarga murojaat qiling.";
+    }
+
+    // LocalStorage ga saqlash funksiyasi
+    function saqlashTarix(natijaObj) {
+      let tarix = JSON.parse(localStorage.getItem('semirtirishTarix')) || [];
+      tarix.push(natijaObj);
+      // Oxirgi 20 ta yozuvni saqlaymiz, ko'p bo'lsa eski yozuvlarni o'chiramiz
+      if (tarix.length > 20) {
+        tarix.shift();
+      }
+      localStorage.setItem('semirtirishTarix', JSON.stringify(tarix));
+    }
+
+    // Tarixni ekranga chiqarish funksiyasi
+    function korsatishTarix() {
+      let tarix = JSON.parse(localStorage.getItem('semirtirishTarix')) || [];
+      const div = document.getElementById('tarix');
+      if (tarix.length === 0) {
+        div.textContent = "Hozircha tarix bo‘sh...";
+        return;
+      }
+      div.innerHTML = '';
+      tarix.slice().reverse().forEach((item, index) => {
+        const date = new Date(item.sana).toLocaleString();
+        const blok = document.createElement('div');
+        blok.style.borderBottom = '1px solid #333';
+        blok.style.marginBottom = '8px';
+        blok.style.paddingBottom = '5px';
+        blok.innerHTML = `
+          <strong>${date}</strong><br/>
+          Turi: ${item.tur}<br/>
+          Yosh: ${item.yosh} oy<br/>
+          Vazn: ${item.vazn} kg<br/>
+          Oldingi vazn: ${item.vaznOld} kg<br/>
+          Vazn o‘zgarishi: ${item.foiz.toFixed(2)}%<br/>
+          Semirtirish turi: <em>${item.semirtirishTuri}</em><br/>
+          Tashxis: ${item.tashxis}
+        `;
+        div.appendChild(blok);
+      });
+    }
+
+    // Tarixni tozalash
+    document.getElementById('clearTarix').addEventListener('click', () => {
+      if (confirm("Tarixni tozalaysizmi?")) {
+        localStorage.removeItem('semirtirishTarix');
+        korsatishTarix();
+      }
+    });
+
+    // Form submit event
+    document.getElementById('semirtirishForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const tur = document.getElementById('tur').value;
+      const yosh = Number(document.getElementById('yosh').value);
+      const vazn = Number(document.getElementById('vazn').value);
+      const vaznOld = Number(document.getElementById('vaznOld').value);
+
+      if (vaznOld === 0) {
+        alert('Oldingi vazn 0 bo‘lishi mumkin emas');
+        return;
+      }
+
+      const yemlar = yemAralashmalari[tur].map(yem => `${yem.time}: ${yem.amount} kg ${yem.name}`).join(', ');
+      const vitaminlar = vitaminTavsiyalar[tur].join(', ');
+
+      const foiz = ((vazn - vaznOld) / vaznOld) * 100;
+
+      const semirtirishTuri = semirtirishTuriniAniqlash(foiz);
+      const tashxis = tashxisQoyish(foiz);
+
+      const yemMiqdori = yemAralashmalari[tur].reduce((sum, yem) => sum + yem.amount, 0);
+
+      const natijaHTML = `
+        <div class="semirtirish-turi">Semirtirish turi: ${semirtirishTuri}</div>
+        <p>Bugungi vazn: ${vazn} kg</p>
+        <p>Oldingi vazn: ${vaznOld} kg</p>
+        <p>Vazn o‘zgarishi: ${foiz.toFixed(2)}%</p>
+        <p><strong>Yem aralashmasi:</strong> ${yemlar}</p>
+        <p><strong>Yem kunlik umumiy miqdori taxminan:</strong> ${yemMiqdori.toFixed(2)} kg</p>
+        <p><strong>Tavsiya etilgan vitaminlar:</strong> ${vitaminlar}</p>
+        <p><strong>Tashxis:</strong> ${tashxis}</p>
+      `;
+
+      document.getElementById('natija').innerHTML = natijaHTML;
+
+      // Natijani tarixga saqlaymiz
+      saqlashTarix({
+        sana: new Date().toISOString(),
+        tur,
+        yosh,
+        vazn,
+        vaznOld,
+        foiz,
+        semirtirishTuri,
+        tashxis
+      });
+
+      korsatishTarix();
+    });
+
+    // Sahifa ochilganda tarixni ko‘rsatamiz
+    korsatishTarix();
+  </script>
+</body>
+</html>

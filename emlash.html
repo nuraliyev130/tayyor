@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emlash - HayCare</title>
+  <style>
+    body {
+      background: #111;
+      color: #eee;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #00ff99;
+      font-size: 32px;
+    }
+    label, select, input, button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    select, input {
+      background: #222;
+      color: #fff;
+    }
+    button {
+      background: #00cc66;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #natija {
+      margin-top: 20px;
+      padding: 15px;
+      background: #1a1a1a;
+      border-radius: 10px;
+      font-size: 18px;
+    }
+    a {
+      color: #00ffcc;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>💉 Emlash bo‘limi</h1>
+
+  <label for="hayvon">Hayvon turi:</label>
+  <select id="hayvon">
+    <option value="">Tanlang</option>
+    <option value="sigir">Sigir</option>
+    <option value="qoy">Qo‘y</option>
+    <option value="echki">Echki</option>
+    <option value="ot">Ot</option>
+  </select>
+
+  <label for="yosh">Yoshi (oyda):</label>
+  <input type="number" id="yosh" min="0" placeholder="Masalan: 3">
+
+  <button onclick="hisobla()">Emlashni ko‘rish</button>
+
+  <div id="natija"></div>
+
+  <a href="index.html">⬅️ Bosh sahifaga qaytish</a>
+
+  <script>
+    const dorilar = {
+      sigir: [
+        { yosh: 1, dori: 'IBR + BVD vaksinasi' },
+        { yosh: 2, dori: 'Brutselyozga qarshi emlash' },
+        { yosh: 6, dori: 'Qayta BVD vaksinasi' },
+      ],
+      qoy: [
+        { yosh: 1, dori: 'Enterotoksemiya vaksinasi' },
+        { yosh: 2, dori: 'Quloq qurtlariga qarshi' },
+        { yosh: 6, dori: 'Qayta enterotoksemiya' },
+      ],
+      echki: [
+        { yosh: 1, dori: 'Qizamiqqa qarshi emlash' },
+        { yosh: 2, dori: 'Ichak kasalliklariga qarshi' },
+        { yosh: 5, dori: 'Pasterellyozga qarshi' },
+      ],
+      ot: [
+        { yosh: 3, dori: 'Tetanus va Influenza' },
+        { yosh: 6, dori: 'Qayta Influenza' },
+        { yosh: 12, dori: 'Yillik gripp vaksinasi' },
+      ],
+    };
+
+    function hisobla() {
+      const hayvon = document.getElementById('hayvon').value;
+      const yosh = parseInt(document.getElementById('yosh').value);
+      const natijaDiv = document.getElementById('natija');
+
+      if (!hayvon || isNaN(yosh)) {
+        natijaDiv.innerHTML = '<p>Iltimos, barcha maydonlarni to‘ldiring.</p>';
+        return;
+      }
+
+      const tavsiyalar = dorilar[hayvon].filter(d => yosh >= d.yosh);
+
+      if (tavsiyalar.length === 0) {
+        natijaDiv.innerHTML = '<p>Bu yoshdagi hayvon uchun emlash tavsiya qilinmagan.</p>';
+        return;
+      }
+
+      let html = '<h2>Tavsiya etilgan emlashlar:</h2><ul>';
+      tavsiyalar.forEach(t => {
+        html += `<li>${t.dori} (${t.yosh}-oy)</li>`;
+      });
+      html += '</ul>';
+
+      natijaDiv.innerHTML = html;
+    }
+  </script>
+
+</body>
+</html>

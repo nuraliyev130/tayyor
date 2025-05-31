@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HayCare - Veterinariya Xizmati</title>
+  <style>
+    body {
+      background: #111;
+      color: #b7f7c5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 700px;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00bb44;
+    }
+    h1 {
+      text-align: center;
+      color: #00ff66;
+      margin-bottom: 15px;
+    }
+    #searchInput {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      margin-bottom: 20px;
+      font-size: 16px;
+      background: #222;
+      color: #b7f7c5;
+      box-shadow: inset 0 0 5px #00bb44;
+    }
+    .vet-card {
+      background: #222;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 0 6px #00bb44;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .vet-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 15px #00ff66;
+    }
+    .vet-photo {
+      flex-shrink: 0;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #00bb44;
+    }
+    .vet-info {
+      flex-grow: 1;
+    }
+    .vet-name {
+      font-size: 22px;
+      color: #00ff66;
+      margin-bottom: 5px;
+    }
+    .vet-specialty {
+      font-style: italic;
+      color: #7fffaa;
+      margin-bottom: 8px;
+    }
+    .vet-contact {
+      font-weight: bold;
+      color: #b7f7c5;
+    }
+    .vet-contact a {
+      color: #00bb44;
+      text-decoration: none;
+    }
+    .vet-contact a:hover {
+      text-decoration: underline;
+    }
+    .back-home {
+      display: block;
+      margin: 30px auto 0;
+      width: max-content;
+      padding: 10px 20px;
+      background: #00bb44;
+      color: #111;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 6px;
+      box-shadow: 0 0 8px #00bb44;
+      transition: background 0.3s ease;
+      text-align: center;
+    }
+    .back-home:hover {
+      background: #00ff66;
+      color: #000;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.8);
+    }
+    .modal-content {
+      background-color: #222;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      color: #b7f7c5;
+      box-shadow: 0 0 10px #00bb44;
+      position: relative;
+    }
+    .close-btn {
+      color: #00ff66;
+      font-size: 28px;
+      font-weight: bold;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      cursor: pointer;
+    }
+    .modal-photo {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #00bb44;
+      display: block;
+      margin: 0 auto 15px auto;
+    }
+    .modal-name {
+      font-size: 26px;
+      text-align: center;
+      margin-bottom: 10px;
+      color: #00ff66;
+    }
+    .modal-specialty {
+      font-style: italic;
+      text-align: center;
+      margin-bottom: 15px;
+      color: #7fffaa;
+    }
+    .modal-contact {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+    .contact-buttons a {
+      background: #00bb44;
+      color: #111;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 0 8px #00bb44;
+      transition: background 0.3s ease;
+      display: inline-block;
+    }
+    .contact-buttons a:hover {
+      background: #00ff66;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>👨‍⚕️ Veterinarlar</h1>
+
+  <input type="text" id="searchInput" placeholder="Veterinarni qidirish..." />
+
+  <div id="vetList">
+
+    <div class="vet-card" data-name="Akmal Toshmatov" data-specialty="Hayvonlar kasalliklari bo‘yicha mutaxassis" data-phone="+998901234567" data-telegram="akmalvet" data-photo="https://i.pravatar.cc/100?img=12">
+      <img src="https://i.pravatar.cc/100?img=12" alt="Dr. Akmal Toshmatov" class="vet-photo" />
+      <div class="vet-info">
+        <div class="vet-name">Dr. Akmal Toshmatov</div>
+        <div class="vet-specialty">Hayvonlar kasalliklari bo‘yicha mutaxassis</div>
+        <div class="vet-contact">Telefon: <a href="tel:+998901234567">+998 90 123 45 67</a></div>
+      </div>
+    </div>
+
+    <div class="vet-card" data-name="Nigora Raxmatova" data-specialty="Veterinariya pediatriyasi va emlash bo‘yicha mutaxassis" data-phone="+998901112233" data-telegram="nigoravet" data-photo="https://i.pravatar.cc/100?img=33">
+      <img src="https://i.pravatar.cc/100?img=33" alt="Dr. Nigora Raxmatova" class="vet-photo" />
+      <div class="vet-info">
+        <div class="vet-name">Dr. Nigora Raxmatova</div>
+        <div class="vet-specialty">Veterinariya pediatriyasi va emlash bo‘yicha mutaxassis</div>
+        <div class="vet-contact">Telefon: <a href="tel:+998901112233">+998 90 111 22 33</a></div>
+      </div>
+    </div>
+
+    <div class="vet-card" data-name="Botir Ergashev" data-specialty="Chirurg va hayvon parvarishi bo‘yicha mutaxassis" data-phone="+998909998877" data-telegram="botirvet" data-photo="https://i.pravatar.cc/100?img=45">
+      <img src="https://i.pravatar.cc/100?img=45" alt="Dr. Botir Ergashev" class="vet-photo" />
+      <div class="vet-info">
+        <div class="vet-name">Dr. Botir Ergashev</div>
+        <div class="vet-specialty">Chirurg va hayvon parvarishi bo‘yicha mutaxassis</div>
+        <div class="vet-contact">Telefon: <a href="tel:+998909998877">+998 90 999 88 77</a></div>
+      </div>
+    </div>
+
+  </div>
+
+  <a href="index.html" class="back-home">⬅️ Bosh sahifaga qaytish</a>
+
+  <!-- Modal -->
+  <div id="vetModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="modalClose">&times;</span>
+      <img src="" alt="" class="modal-photo" id="modalPhoto" />
+      <div class="modal-name" id="modalName"></div>
+      <div class="modal-specialty" id="modalSpecialty"></div>
+      <div class="modal-contact" id="modalPhone"></div>
+      <div class="contact-buttons">
+        <a href="#" target="_blank" id="callBtn">📞 Qo‘ng‘iroq qilish</a>
+        <a href="#" target="_blank" id="telegramBtn">💬 Telegram</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const vetCards = document.querySelectorAll('.vet-card');
+    const modal = document.getElementById('vetModal');
+    const modalClose = document.getElementById('modalClose');
+    const modalPhoto = document.getElementById('modalPhoto');
+    const modalName = document.getElementById('modalName');
+    const modalSpecialty = document.getElementById('modalSpecialty');
+    const modalPhone = document.getElementById('modalPhone');
+    const callBtn = document.getElementById('callBtn');
+    const telegramBtn = document.getElementById('telegramBtn');
+    const searchInput = document.getElementById('searchInput');
+    const vetList = document.getElementById('vetList');
+
+    vetCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const name = card.dataset.name;
+        const specialty = card.dataset.specialty;
+        const phone = card.dataset.phone;
+        const telegram = card.dataset.telegram;
+        const photo = card.dataset.photo;
+
+        modalPhoto.src = photo;
+        modalName.textContent = name;
+        modalSpecialty.textContent = specialty;
+        modalPhone.innerHTML = `Telefon: <a href="tel:${phone}">${phone}</a>`;
+        callBtn.href = `tel:${phone}`;
+        telegramBtn.href = `https://t.me/${telegram}`;
+
+        modal.style.display = 'block';
+      });
+    });
+
+    modalClose.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+
+    // Search functionality
+    searchInput.addEventListener('input', () => {
+      const filter = searchInput.value.toLowerCase();
+      vetCards.forEach(card => {
+        const name = card.dataset.name.toLowerCase();
+        const specialty = card.dataset.specialty.toLowerCase();
+        if (name.includes(filter) || specialty.includes(filter)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

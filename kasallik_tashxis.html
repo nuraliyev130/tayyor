@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HayCare - Kasallik Tashxis</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #f2994a, #f2c94c);
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header {
+      background-color: rgba(0,0,0,0.2);
+      padding: 20px;
+      text-align: center;
+      font-size: 2rem;
+      color: white;
+      font-weight: bold;
+    }
+    main {
+      max-width: 600px;
+      margin: auto;
+      padding: 30px 20px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+    h2 {
+      text-align: center;
+      color: #d35400;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 12px;
+      background-color: #e67e22;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: #d35400;
+    }
+    .result {
+      margin-top: 30px;
+      padding: 15px;
+      background-color: #fef3e7;
+      border-left: 5px solid #e67e22;
+      border-radius: 8px;
+    }
+    .back-btn {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .back-btn a {
+      text-decoration: none;
+      padding: 12px 24px;
+      background-color: #ccc;
+      color: #333;
+      border-radius: 25px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+    .back-btn a:hover {
+      background-color: #999;
+    }
+  </style>
+</head>
+<body>
+
+<header>Kasallik Tashxis - AI yordamida</header>
+
+<main>
+  <h2>Hayvoningiz sog‘lig‘ini tekshiring</h2>
+  <label for="animalType">Hayvon turi:</label>
+  <select id="animalType">
+    <option value="sigir">Sigir</option>
+    <option value="qo‘y">Qo‘y</option>
+    <option value="echki">Echki</option>
+    <option value="ot">Ot</option>
+    <option value="qush">Qush</option>
+  </select>
+
+  <label for="symptoms">Simptomlar (belgilar):</label>
+  <textarea id="symptoms" rows="4" placeholder="Masalan: ishtaha yo‘qolgan, burun oqishi..."></textarea>
+
+  <label for="imageUpload">Rasm yuklang (ixtiyoriy):</label>
+  <input type="file" id="imageUpload" accept="image/*" />
+
+  <button onclick="diagnose()">Tashxis qo‘yish</button>
+
+  <div id="result" class="result" style="display: none;">
+    <strong>AI Tashxisi:</strong>
+    <p id="diagnosisText">Analiz qilinmoqda...</p>
+  </div>
+
+  <div class="back-btn">
+    <a href="index.html">⬅ Bosh sahifaga qaytish</a>
+  </div>
+</main>
+
+<script>
+  function diagnose() {
+    const animal = document.getElementById("animalType").value;
+    const symptoms = document.getElementById("symptoms").value.trim();
+
+    if (!symptoms) {
+      alert("Iltimos, simptomlarni kiriting.");
+      return;
+    }
+
+    // AI modeli bilan ulanish o‘rniga bu yerda demo tashxis yoziladi:
+    const mockDiagnosis = {
+      "sigir": "Sigiringizda bronxit bo‘lishi mumkin. Issiq muhitda saqlang va veterinar bilan maslahat qiling.",
+      "qo‘y": "Qo‘yingizda ich ketish alomatlari bor. Dehidratatsiyaga qarshi choralar ko‘ring.",
+      "echki": "Echkida shamollash kuzatilmoqda. Antibakterial vositalar yordamida davolash kerak.",
+      "ot": "Ot sport stressi yoki shamollashdan aziyat chekmoqda.",
+      "qush": "Qushingizda virusli infeksiya ehtimoli bor. Alohida saqlang."
+    };
+
+    document.getElementById("result").style.display = "block";
+    document.getElementById("diagnosisText").innerText = mockDiagnosis[animal];
+  }
+</script>
+
+</body>
+</html>
